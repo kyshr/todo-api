@@ -19,9 +19,8 @@ exports.getTodos = async function (
             data: {
                 list: todo,
                 numberOfPages: pages,
-                currentPage: pageNumber,
+                currentPage: parseInt(pageNumber),
             },
-            currentPage: parseInt(pageNumber),
         };
     } catch (error) {
         console.log(error);
@@ -31,7 +30,7 @@ exports.getTodos = async function (
 
 exports.getTodo = async function (id) {
     try {
-        const todo = await Todo.findOne(id);
+        const todo = await Todo.findOne({ _id: id });
         return { status: 200, data: todo };
     } catch (error) {
         console.log(error);

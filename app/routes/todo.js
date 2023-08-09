@@ -31,7 +31,7 @@ router.get(
     async function (req, res, next) {
         const id = req.params.id;
         if (id) {
-            const todos = await getTodo();
+            const todos = await getTodo(id);
             return res.status(todos.status).json(todos.data);
         }
         res.status(400).json({ data: null, message: "Invalid request" });

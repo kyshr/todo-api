@@ -28,7 +28,7 @@ router.get(
     async function (req, res, next) {
         const id = req.params.id;
         if (id) {
-            const users = await getUser();
+            const users = await getUser(id);
             return res.status(users.status).json(users.data);
         }
         res.status(400).json({ data: null, message: "Invalid request" });

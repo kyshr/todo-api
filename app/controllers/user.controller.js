@@ -14,7 +14,7 @@ exports.getUsers = async function () {
 
 exports.getUser = async function (id) {
     try {
-        const user = await User.findOne(id).select(["-password"]);
+        const user = await User.findOne({ _id: id }).select(["-password"]);
         return { status: 200, data: user };
     } catch (error) {
         console.log(error);
