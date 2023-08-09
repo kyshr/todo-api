@@ -110,7 +110,7 @@ describe("DELETE /api/users/:id", () => {
                 .set("Authorization", `Bearer ${TOKEN}`);
             const userList = users.body;
             const toBeDeleted = userList[userList.length - 1]._id;
-            console.log(toBeDeleted);
+
             const response = await request(app)
                 .delete(`/api/users/${toBeDeleted}`)
                 .set("Authorization", `Bearer ${TOKEN}`);

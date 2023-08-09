@@ -47,7 +47,7 @@ describe("DELETE /api/todos/:id", () => {
                 .set("Authorization", `Bearer ${TOKEN}`);
             const todoList = todos.body.list;
             const toBeDeleted = todoList[todoList.length - 1]._id;
-            console.log(toBeDeleted);
+
             const response = await request(app)
                 .delete(`/api/todos/${toBeDeleted}`)
                 .set("Authorization", `Bearer ${TOKEN}`);
