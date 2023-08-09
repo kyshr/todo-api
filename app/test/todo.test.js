@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../../app");
 
 const TOKEN =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGQzNGQwY2ViMDAxZWNhNDI0YWVhZjMiLCJpYXQiOjE2OTE1NzA4MDcsImV4cCI6MTY5MTgzMDAwN30.OA7cUm0_ZZMobFTv3fTP1OEPX1g6Rzp8rBKPgqPXURE";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGQyN2E2ZDFhMDk2ZTEwNGU5NTYxMjgiLCJpYXQiOjE2OTE1NzUyMjJ9.kbdFANkTw26RHLpanBKeRdjLBnUVYU74mvSB50DBNYE";
 
 describe("POST /api/todos", () => {
     describe("Create todos", () => {
@@ -21,6 +21,7 @@ describe("POST /api/todos", () => {
         });
     });
 });
+
 describe("PUT /api/todos", () => {
     describe("Update todos", () => {
         test("should return status code 200", async () => {
@@ -28,6 +29,7 @@ describe("PUT /api/todos", () => {
                 title: "This is a title of a updated todo",
                 description: "This is the description of updated todo",
             };
+
             const response = await request(app)
                 .put("/api/todos/64d33f4bf92f2f660544b366")
                 .set("Authorization", `Bearer ${TOKEN}`)
@@ -36,6 +38,24 @@ describe("PUT /api/todos", () => {
         });
     });
 });
+
+describe("DELETE /api/todos/:id", () => {
+    describe("Delete todos", () => {
+        test("should return status code 200", async () => {
+            const todos = await request(app)
+                .get("/api/todos")
+                .set("Authorization", `Bearer ${TOKEN}`);
+            const todoList = todos.body.list;
+            const toBeDeleted = todoList[todoList.length - 1]._id;
+            console.log(toBeDeleted);
+            const response = await request(app)
+                .delete(`/api/todos/${toBeDeleted}`)
+                .set("Authorization", `Bearer ${TOKEN}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
+
 describe("GET /api/todos", () => {
     describe("fetch list of all todos", () => {
         test("should return status code 200", async () => {
