@@ -38,7 +38,7 @@ exports.createUser = async (data) => {
                 status: 400,
                 data: {
                     data: null,
-                    message: "Email already exists",
+                    message: "Email already exist",
                 },
             };
         } else {
