@@ -15,7 +15,10 @@ router.get(
     "/",
     passport.authenticate("jwt", { session: false }),
     async function (req, res, next) {
-        const todos = await getTodos();
+        const pageLength = req.query.pageLength ? req.query.pageLength : 10;
+        const pageNumber = req.query.pageNumber ? req.query.pageNumber : 1;
+        const status = req.query.status ? req.query.status : "";
+        const todos = await getTodos(pageLength, pageNumber, status);
 
         res.status(todos.status).json(todos.data);
     }
@@ -41,8 +44,17 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async function (req, res, next) {
         const id = req.params.id;
+        const pageLength = req.query.pageLength ? req.query.pageLength : 10;
+        const pageNumber = req.query.pageNumber ? req.query.pageNumber : 1;
+        const status = req.query.status ? req.query.status : "";
+
         if (id) {
-            const todos = await getTodosByUserId(id);
+            const todos = await getTodosByUserId(
+                id,
+                pageLength,
+                pageNumber,
+                status
+            );
             return res.status(todos.status).json(todos.data);
         }
         res.status(400).json({ data: null, message: "Invalid request" });

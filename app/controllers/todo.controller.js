@@ -2,10 +2,27 @@ const Todo = require("../models/todo.model");
 const auth = require("../utils/auth");
 const bcrypt = require("bcrypt");
 
-exports.getTodos = async function () {
+exports.getTodos = async function (
+    pageLength = 10,
+    pageNumber = 1,
+    status = ""
+) {
     try {
-        const todo = await Todo.find();
-        return { status: 200, data: todo };
+        const filter = status ? { status: status } : {};
+        const findAllDocs = await Todo.find(filter);
+        const pages = Math.ceil(findAllDocs.length / pageLength);
+        const todo = await Todo.find(filter)
+            .skip(pageNumber === 1 ? 0 : (pageNumber - 1) * pageLength)
+            .limit(pageLength);
+        return {
+            status: 200,
+            data: {
+                list: todo,
+                numberOfPages: pages,
+                currentPage: pageNumber,
+            },
+            currentPage: parseInt(pageNumber),
+        };
     } catch (error) {
         console.log(error);
         return { status: 400, data: null, message: "An error occured" };
@@ -27,10 +44,29 @@ exports.getTodo = async function (id) {
         };
     }
 };
-exports.getTodosByUserId = async function (userId) {
+exports.getTodosByUserId = async function (
+    userId,
+    pageLength = 10,
+    pageNumber = 1,
+    status = ""
+) {
     try {
-        const todo = await Todo.find({ owner: userId });
-        return { status: 200, data: todo };
+        const filter = status
+            ? { owner: userId, status: status }
+            : { owner: userId };
+        const findAllDocs = await Todo.find(filter);
+        const pages = Math.ceil(findAllDocs.length / pageLength);
+        const todo = await Todo.find(filter)
+            .skip(pageNumber === 1 ? 0 : (pageNumber - 1) * pageLength)
+            .limit(pageLength);
+        return {
+            status: 200,
+            data: {
+                list: todo,
+                numberOfPages: pages,
+                currentPage: parseInt(pageNumber),
+            },
+        };
     } catch (error) {
         console.log(error);
         return {
